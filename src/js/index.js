@@ -1,29 +1,40 @@
-import swal from 'sweetalert';
 import 'bootstrap';
 import '../scss/styles.scss';
-
+import swal from 'sweetalert';
 
 const search = document.getElementById('search');
 const sendButton = document.getElementById('sendButton');
 const randomButton = document.getElementById('randomButton');
-
+const modal = document.getElementById('modal');
+const close = document.getElementsByClassName('close')[0];
 
 sendButton.onclick = function (e) {
     e.preventDefault();
     const valor = search.value;
-    const container = document.getElementById("mountains");
+    const container = document.getElementById("results-container");
     container.innerHTML = '';
-    //const container = document.getElementById('search-container');
-    //container.className += ' visually-hidden';
-    
-    getGithubUsers(valor).then(function (data) {
-        if(!data.length) {
-            swal('No se encontró información.')
-        } else {
-            container.appendChild(buildTable(formatData(data)));
-            container.scrollIntoView();
-        }
-    });
+
+    if(!valor.length) {
+        swal('Debe ingresar un termino de búsqueda.');
+    } else if (valor.length === 1){
+        getByFirstLetter(valor).then(function (data) {
+            if(!data.length) {
+                swal('No se encontró información.');
+            } else {
+                container.appendChild(buildResults(formatData(data)));
+                container.scrollIntoView();
+            }
+        });
+    } else {
+        getByName(valor).then(function (data) {
+            if(!data.length) {
+                swal('No se encontró información.');
+            } else {
+                container.appendChild(buildResults(formatData(data)));
+                container.scrollIntoView();
+            }
+        });
+    }
 }
 
 randomButton.onclick = function (e) {
@@ -32,51 +43,9 @@ randomButton.onclick = function (e) {
     });
 }
 
-function getUrlParameters(param) {
-    let pageURL = window.location.search.substring(1);
-    let urlVariables = pageURL.split('&');
-    for (let i = 0; i < urlVariables.length; i++) {
-        let parameterName = urlVariables[i].split('=');
-        if (parameterName[0] == param) {
-            return parameterName[1];
-        }
-    }
-}
-
-function getGithubUsers(value) {
-    return fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${value}`) //s=${value}`)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            return data.meals || [];
-        })
-}
-
-function getById(id) {
-    return fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`) //s=${value}`)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            return data.meals || [];
-        })
-}
-
-function getRandom() {
-    return fetch(`https://www.themealdb.com/api/json/v1/1/random.php`) //s=${value}`)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            return data.meals || [];
-        })
-}
-
-function buildTable(data) {
+function buildResults(data) {
     const results = document.createElement('div');
     results.className = 'row';
-    //const fields = Object.keys(data[0]);
 
     data.forEach(async object => {
         const container = document.createElement("div");
@@ -117,64 +86,6 @@ function buildTable(data) {
     });
 
     return results;
-
-
-    /*const table = document.createElement("table");
-    table.className = 'table table-striped';
-
-    
-    const header = document.createElement("thead");
-    const headRow = document.createElement("tr");
-    const headCell = document.createElement("th");
-    headCell.scope = 'col';
-
-    headCell.appendChild(document.createTextNode('#'));
-    headRow.appendChild(headCell);
-
-    fields.forEach(function (field) {
-        if(field !== 'id') {
-        const headCell = document.createElement("th");
-        headCell.scope = 'col';
-        headCell.appendChild(document.createTextNode(field === 'Imagen' ? '' : field));
-        headRow.appendChild(headCell);
-        }
-    });
-
-    header.appendChild(headRow);
-    table.appendChild(header);
-
-    const body = document.createElement("tbody");
-    data.forEach(function (object, i) {
-        console.log(object);
-        const row = document.createElement("tr");
-        const cell = document.createElement("th");
-        cell.scope = 'row';
-        cell.appendChild(document.createTextNode(`${i + 1}`));
-        row.appendChild(cell);
-
-        fields.forEach(function (field) {
-            if(field !== 'id') {
-            const cell = document.createElement("td");
-            if (field === 'Imagen') {
-                const image = document.createElement('img');
-                image.className = 'img-fluid img-thumbnail';
-                image.onclick = function() { showDetail(object['id']); };
-                image.width = 75;
-                image.src = object[field];
-                cell.appendChild(image)
-            } else {
-                cell.appendChild(document.createTextNode(object[field]));
-                if (typeof object[field] == "number") {
-                    cell.style.textAlign = "right";
-                }
-            }
-            row.appendChild(cell);
-            }
-        });
-        body.appendChild(row);
-    });
-    table.appendChild(body);
-    return table;*/
 }
 
 const formatData = (data) => {
@@ -189,32 +100,26 @@ const formatData = (data) => {
     });
 }
 
-
-const modal = document.getElementById("modal");
-
-const button = document.getElementsByTagName('button')[0];
-const modalImage = document.getElementById("modal-image");
-const close = document.getElementsByClassName("close")[0];
-
 function showModal(receipt) {
+    const modalImage = document.getElementById('modal-image');
     const receiptTitle = document.getElementById('receipt-title');
     const ingredientList = document.getElementById('ingredients-list');
     const instructions = document.getElementById('receipt-instructions');
 
+    modalImage.innerHTML = '';
     receiptTitle.innerHTML = '';
     ingredientList.innerHTML = '';
     instructions.innerHTML = '';
-        
-    receiptTitle.appendChild(document.createTextNode(receipt.strMeal));
-    ingredientList.appendChild(getIngredients(receipt));
-    instructions.appendChild(document.createTextNode(receipt.strInstructions));
 
-    instructions.className = "text-justify";
-        
-    modal.style.display = "block";
     modalImage.className = "img-fluid rounded mx-auto d-block"
     modalImage.width = 300;
     modalImage.src = receipt.strMealThumb;
+    receiptTitle.appendChild(document.createTextNode(receipt.strMeal));
+    ingredientList.appendChild(getIngredients(receipt));
+    instructions.appendChild(document.createTextNode(receipt.strInstructions));
+    instructions.className = "text-justify";
+        
+    modal.style.display = "block";
 }
 
 function showDetail(id) {
@@ -222,12 +127,6 @@ function showDetail(id) {
         showModal(data[0]);
     })
 }
-
-
-/*button.addEventListener('click', function() {
-    modal.style.display = "block";
-    modalImage.src = 'https://picsum.photos/300/200';
-})*/
 
 close.addEventListener('click', function() {
   modal.style.display = "none";
@@ -250,18 +149,42 @@ function getIngredients(data) {
     return list;
 }
 
-
-/*
-var form = document.forms['form'];
-
-form.onsubmit = function(e){
-    e.preventDefault();
-    var select = document.form.fruit.value;
-    console.log(select);
-    document.getElementById('print').innerHTML=select.toUpperCase();
+function getByFirstLetter(value) {
+    return fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${value}`)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            return data.meals || [];
+        })
 }
 
-window.prueba = function () {
-    alert('Si entra la prueba.');
+function getRandom() {
+    return fetch(`https://www.themealdb.com/api/json/v1/1/random.php`)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            return data.meals || [];
+        })
 }
-*/
+
+function getByName(value) {
+    return fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${value}`)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            return data.meals || [];
+        })
+}
+
+function getById(id) {
+    return fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            return data.meals || [];
+        })
+}

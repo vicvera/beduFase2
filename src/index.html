@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.scss">
+  <title>Proyecto Equipo 15</title>
+</head>
+
+<body>
+  <main>
+    <div id="search-container" class="d-flex align-items-center px-4 py-5 text-center">
+      <div class="col-lg-6 mx-auto">
+        <h1 class="display-5 fw-bold text-white">Buscador de recetas</h1>
+        <input type="text" id="search" class="form-control lead mb-4" placeholder="Nombre o inicial" aria-label="Nombre" aria-describedby="basic-addon2">
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <button type="button" id="sendButton" class="btn btn-grad btn-lg px-4 gap-3">&nbsp;&nbsp;&nbsp;Buscar&nbsp;&nbsp;&nbsp;</button>
+          <button type="button" id="randomButton" class="btn btn-outline-light btn-lg px-4">Aleatorio</button>
+        </div>
+      </div>
+      <div class="custom-shape-divider-bottom-1661921874">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
+            <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
+            <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
+        </svg>
+      </div>
+    </div>
+
+    <div id="mountains" class="p-3">
+      <div class="row" id="results">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+          <div class="card" class="w-100">
+            <img class="card-img-top" src="https://www.themealdb.com/images/media/meals/wxywrq1468235067.jpg" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+          <p>Prueba</p>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+          <p>Prueba</p>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+          <p>Prueba</p>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+          <p>Prueba</p>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+          <p>Prueba</p>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+          <p>Prueba</p>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+          <p>Prueba</p>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+          <p>Prueba</p>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+          <p>Prueba</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal" class="px-4">
+      <span class="close">&times;</span>
+      <div class="card mb-5">
+        <div class="row">
+          <div class="col-md-6 px-5 py-5">
+            <img id="modal-image">
+          </div>
+          <div class="col-md-6 px-5 py-5">
+            <h3 id="receipt-title"></h3>
+            <p><strong>Ingredients: </strong></p>
+            <div id="ingredients-list"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 px-5 py-5">
+            <p><strong>Instructions: </strong></p>
+            <p id="receipt-instructions"></p>
+          </div>
+        </div>
+      </div>
+    </div>    
+  </main>
+</body>
+</html>
